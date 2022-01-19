@@ -5,3 +5,7 @@ lib
 tests/
 .envrc
 __pycache__
+.env 
+env/
+.pytest_cache/
+.gitignore
