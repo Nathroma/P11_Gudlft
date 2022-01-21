@@ -38,15 +38,15 @@ def showSummary():
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
+def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
 
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+    if foundClub and foundCompetition and foundCompetition['date'] >= str(datetime.now()):
+        return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions, 
+        flash("Une erreur est apparue, veuillez reessayer")
+        return render_template('welcome.html', club=club, competitions=competitions,
             date=str(datetime.now()))
 
 
@@ -68,9 +68,9 @@ def purchasePlaces():
         flash("Vous n'avez pas assez de points")
     else:
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-        club['points'] = int(club['points']) - placesRequired * 3
-        club[competition['name']] = int(club[competition['name']]) + placesRequired
-        flash('Great-booking complete!')
+        club['points'] = int(club['points'])-placesRequired*3
+        club[competition['name']] = int(club[competition['name']])+placesRequired
+        flash('Great-booking complete! Number of places purchased: ' + str(placesRequired))
     return render_template('welcome.html', club=club, competitions=competitions,
         date=str(datetime.now()))
 
