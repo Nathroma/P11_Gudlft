@@ -2,13 +2,6 @@ from tests.unit_tests.test_server import server
 from tests.unit_tests.conftest import client
 
 
-def test_futur_comp(client):
-	comp = server.competitions[1]
-	response = client.get('/book/'+comp['name']+'/Test')
-	assert "Places available: " + comp["numberOfPlaces"] in response.data.decode()
-	assert response.status_code == 200
-
-
 def test_purchase_not_enough_point(client):
 	comp = server.competitions[1]
 	club = server.clubs[1]
@@ -27,7 +20,7 @@ def test_purchase_max_places(client):
 	response = client.post('/purchasePlaces', data={
 		"club": club['name'],
 		"competition": comp['name'],
-		"places": 13
+		"places": 15
 		})
 	assert "Vous ne pouvez pas prendre plus de 12 places" in response.data.decode()
 	assert response.status_code == 200
@@ -51,10 +44,10 @@ def test_purchase_places(client):
 	response = client.post('/purchasePlaces', data={
 		"club": club['name'],
 		"competition": comp['name'],
-		"places": 3
+		"places": 2
 		})
-	assert "Reservation validée ! Nombre de places achetées : 3" in response.data.decode()
-	assert club["points"] == 15-3*3
-	assert comp["numberOfPlaces"] == 13-3
-	assert club[comp['name']] == 3
+	assert "Reservation validée ! Nombre de places achetées : 2" in response.data.decode()
+	assert club["points"] == 15-2*3
+	assert comp["numberOfPlaces"] == 15-2
+	assert club[comp['name']] == 2
 	assert response.status_code == 200
