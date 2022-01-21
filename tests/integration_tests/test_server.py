@@ -53,7 +53,7 @@ def test_purchase_places(client):
 		"competition": comp['name'],
 		"places": 3
 		})
-	assert "Great-booking complete! Number of places purchased: 3" in response.data.decode()
+	assert "Reservation validée ! Nombre de places achetées : 3" in response.data.decode()
 	assert club["points"] == 15-3*3
 	assert comp["numberOfPlaces"] == 13-3
 	assert club[comp['name']] == 3
